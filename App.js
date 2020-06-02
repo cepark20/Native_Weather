@@ -1,11 +1,18 @@
 import React from 'react';
 import Loading from "./Loading";
+import * as Location from "expo-location";
 import { StyleSheet, Text, View } from 'react-native';
 
-export default function App() {
-  return (
-  <Loading />
-  );
+export default class extends React.Component {
+  getLocation = async() =>{
+    const location = await Location.getCurrentPositionAsync();
+  }
+  componentDidMount(){
+    this.getLocation();
+  }
+  render(){
+    return <Loading />;
+  }
 }
 
 const styles = StyleSheet.create({
