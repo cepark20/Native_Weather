@@ -1,5 +1,6 @@
 import React from 'react';
 import Loading from "./Loading";
+import Weather from "./Weather";
 import * as Location from "expo-location";
 import axios from "axios";
 import { StyleSheet, Text, View, Alert } from 'react-native';
@@ -12,9 +13,10 @@ export default class extends React.Component {
   };
   getWeather = async(latitude, longitude) => {
     const {data} = await axios.get(
-      `http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}`
+      `http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`
       );
-  }
+      this.setState({isLoading : false, temp:data.main.temp});
+    }
   getLocation = async() =>{
     try {
       await Location.requestPermissionsAsync();
@@ -22,7 +24,7 @@ export default class extends React.Component {
       const {coords:{latitude, longitude}} = await Location.getCurrentPositionAsync();
             
       this.getWeather(latitude, longitude);
-      this.setState({isLoading : false});
+      
       //Send to API and get weather
     } catch (error) {
         Alert.alert("Location Error", "설정에서 위치 권한을 허용해주십시오.");
@@ -31,11 +33,21 @@ export default class extends React.Component {
   componentDidMount(){
     this.getLocation();
   }
+
   render(){
-    const {isLoading} = this.state;
-    return isLoading ? <Loading /> : null;
+    const {isLoading, temp} = this.state;
+    return isLoading ? <Loading /> : <Weather temp={Math.round(temp)}/>;
   }
 }
+
+
+
+
+
+
+
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -57,4 +69,4 @@ const styles = StyleSheet.create({
 });
 
 // 리액트 네이티브에서는 width나 height을 많이 쓸 필요가 없다 
-// 레이아웃은 주로 flex를 사용하라 
+// 레이아웃은 주로 flex를 사용하라
