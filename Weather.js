@@ -1,17 +1,72 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { StyleSheet, Text, View, Alert } from 'react-native';
+import { StyleSheet, Text, View, Alert, StatusBar } from 'react-native';
 import { MaterialCommunityIcons} from "@expo/vector-icons";
+import {LinearGradient} from "expo-linear-gradient";
 
-export default function Weather({temp}){
+const weatherOptions = {
+    Haze: {
+        iconName: "weather-hail",
+        gradient: ["#4DA0B0", "#D39D38"]
+      },
+      Thunderstorm: {
+        iconName: "",
+        gradient: []
+      },
+      Drizzle: {
+        iconName: "",
+        gradient: []
+      },
+      Rain: {
+        iconName: "",
+        gradient: []
+      },
+      Snow: {
+        iconName: "",
+        gradient: []
+      },
+      Atmosphere: {
+        iconName: "",
+        gradient: []
+      },
+      Clear: {
+        iconName: "",
+        gradient: []
+      },
+      Clouds: {
+        iconName: "",
+        gradient: []
+      },
+      Haze: {
+        iconName: "",
+        gradient: []
+      },
+      Mist: {
+        iconName: "",
+        gradient: []
+      },
+      Dust: {
+        iconName: "",
+        gradient: []
+      }
+}
+
+export default function Weather({temp, condition}){
     return (
-    <View style = {styles.container}>
+    <LinearGradient 
+        colors={weatherOptions[condition].gradient}
+        style = {styles.container}>
+            <StatusBar barStyle="light-content" />
         <View style={styles.halfContainer}>
-            <MaterialCommunityIcons size={96}name="weather-lightning-rainy"></MaterialCommunityIcons>
-            <Text style={styles.temp}>{temp}º</Text>
+            <MaterialCommunityIcons 
+                size={96} 
+                name={weatherOptions[condition].iconName} 
+                color="white">    
+            </MaterialCommunityIcons>
+            <Text style={styles.temp}>{temp}°</Text>
         </View>
         <View style={styles.halfContainer} />
-    </View>
+    </LinearGradient>
     );
 }
 
@@ -32,6 +87,7 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     temp:{
-        fontSize: 42
+        fontSize: 42,
+        color: "white"
     }
 });
